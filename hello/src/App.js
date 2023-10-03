@@ -5,6 +5,7 @@ import Login from './pages/Login/Login';
 import CreateUser from './pages/CreateUser/CreateUser'
 import Home from './pages/Home/Home'
 import CreateProduct from './pages/CreateProduct/CreateProduct'
+import CreatePromotion from './pages/CreatePromotion/CreatePromotion'
 
 function App() {
   const defaultRouter = createBrowserRouter([
@@ -24,15 +25,19 @@ function App() {
       path: "/product/create",
       element: <CreateProduct/>
     },
+    {
+      path: "/promotion/create",
+      element: <CreatePromotion/>
+    },
   ])
 
   const defaultTheme = createTheme({
     palette: {
         primary: {
-            main: '#87A46A'
+          main: '#87A46A'
         }, 
         secondary: {
-            main: '#556B45'
+          main: '#556B45'
         }
     }
 });

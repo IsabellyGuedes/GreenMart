@@ -3,11 +3,11 @@ import { Avatar, Box, Button, Container, Grid, TextField, Typography } from '@mu
 import LocalGroceryStoreIcon from '@mui/icons-material/LocalGroceryStore'
 import httpService from '../../services/httpService'
 import Paper from '@mui/material/Paper'
-import backgroundImage from '../../images/2.png'
 import InputAdornment from '@mui/material/InputAdornment'
 import IconButton from '@mui/material/IconButton'
 import VisibilityIcon from '@mui/icons-material/Visibility'
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff'
+import './loginStyle.css'
 
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css'
@@ -22,7 +22,7 @@ const Login = () => {
 
     useEffect(() => {
         return () => {
-            if (loginDisabledTimeout) {
+            if (loginDisabledTimeout) { 
                 clearTimeout(loginDisabledTimeout)
             }
         };
@@ -53,16 +53,6 @@ const Login = () => {
         }
     }
 
-  const paperStyle = {
-    backgroundImage: `url(${backgroundImage})`,
-    backgroundSize: 'cover', 
-    backgroundRepeat: 'no-repeat', 
-    height: '100vh', 
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-  };
-
   const handlePasswordVisibility = () => {
     setShowPassword(!showPassword)
   };
@@ -73,9 +63,9 @@ const Login = () => {
 
   return (
     <>
-    <Paper elevation={3} style={paperStyle}>
+    <Paper elevation={3} className="paper-container">
             <Container component="main">
-                <Box flexDirection="column" display="flex" alignItems="center" justifyContent="center">
+                <Box className="login-box">
                     <Avatar sx={{bgcolor:"secondary.main"}}>
                         <LocalGroceryStoreIcon />
                     </Avatar>
@@ -83,7 +73,7 @@ const Login = () => {
                         Sign in
                     </Typography>
 
-                    <Box component="form" onSubmit={handleSubmit} width="40%" flexDirection="column" display="flex" alignItems="center" justifyContent="center">
+                    <Box component="form" onSubmit={handleSubmit} className='login-box'>
                         <TextField required fullWidth margin="normal" name="email" type="email" label="Email"/>
                         <TextField
                             required
@@ -104,7 +94,7 @@ const Login = () => {
                                 ),
                             }}
                         />
-                        <Button type="submit" fullWidth sx={{bgcolor: "secondary.main", mt: 5}} variant='contained'> Send </Button>
+                        <Button type="submit" fullWidth sx={{bgcolor: "secondary.main", mt: 2}} variant='contained'> Send </Button>
                         <Grid sx={{mt: 2}} container>
                             <Grid item xs={4}>
                                 <Link> Forgot Password? </Link>

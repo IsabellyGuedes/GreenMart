@@ -2,7 +2,7 @@ import React from 'react';
 import AppBar from '@mui/material/AppBar';
 import Button from '@mui/material/Button';
 import LocalGroceryStoreIcon from '@mui/icons-material/LocalGroceryStore';
-import AddIcon from '@mui/icons-material/Add';
+import LogoutIcon from '@mui/icons-material/Logout';
 import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
@@ -42,17 +42,33 @@ const Home = () => {
           </Typography>
 
           <div style={{ display: 'flex', alignItems: 'center', marginLeft: 'auto' }}>
-            <Button component={RouterLink} to="/product/create" color="inherit" style={{textDecoration: 'none'}}>
+            <Button component={RouterLink} to="/" color="inherit" style={{textDecoration: 'none'}}>
               <Typography variant="h6" color="inherit" noWrap sx={{ textTransform: 'none', mr: 1 }}>
-                Add Product
+                Logout
               </Typography>
-              <AddIcon />
+              <LogoutIcon />
             </Button>
           </div>
         </Toolbar>
       </AppBar>
       <main>
-        <Container sx={{ py: 8 }} maxWidth="md">
+      <Grid container spacing={2} sx={{ mt: 3 }}>
+        <Grid item xs={6} className="addPromotionButton">
+          <Button component={RouterLink} to="/promotion/create" sx={{ textTransform: 'none', bgcolor: "primary.main" }}>
+            <Typography variant="h6" color="black" noWrap sx={{ textTransform: 'none', fontSize: "14px" }}>
+              Add Promotion
+            </Typography>
+          </Button>
+        </Grid>
+        <Grid item xs={6} className="addProductButton">
+          <Button component={RouterLink} to="/product/create" sx={{ textTransform: 'none', bgcolor: "primary.main" }}>
+            <Typography variant="h6" color="black" noWrap sx={{ textTransform: 'none', fontSize: "14px" }}>
+              Add Product
+            </Typography>
+          </Button>
+        </Grid>
+      </Grid>
+        <Container sx={{ py: 3 }} maxWidth="md">
           <Grid container spacing={4}>
             {cards.map((card) => (
               <Grid item key={card} xs={12} sm={6} md={4}>
@@ -65,6 +81,7 @@ const Home = () => {
                       // 16:9
                       pt: '56.25%',
                     }}
+                    
                     image="https://source.unsplash.com/random?wallpapers"
                   />
                   <CardContent sx={{ flexGrow: 1 }}>

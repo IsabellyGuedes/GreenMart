@@ -4,7 +4,7 @@ import { Box } from "@mui/system"
 import PersonIcon from '@mui/icons-material/Person';
 import Paper from '@mui/material/Paper'
 import httpService from '../../services/httpService'
-import './style.css';
+import './createUserStyle.css';
 import { Link } from 'react-router-dom'
 import VisibilityIcon from '@mui/icons-material/Visibility'
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff'
@@ -28,19 +28,27 @@ const CreateUser = () => {
     }
 
     try {
+      //modificar o createUser para oq está no back
         const response = await httpService.createUser(data)
         const result = await response.json()
 
-      if (result.success) {
-        toast.success("Cadastro realizado com sucesso!");
-        navigate('/')
+      if (result.exists) {
+        toast.error("Usuário já cadastrado!");
       } else {
-        // Simulando um erro ao cadastrar um email que já existe
-        toast("E-mail já cadastrado.");
+        const createUserResponse = await httpService.createUser(data)
+        const createUserResult = await createUserResponse.json
+
+        if (createUserResult.sucess) {
+          toast.success("Cadastro realizado com sucesso!")
+          localStorage.setItem("token", result["Access-Token"])
+          navigate('/')
+        } else {
+          toast.error("Erro ao criar o usuário!")
+        }
         }
     } catch (error) {
       toast.error(error.message);
-      this.setState({ isEmailTaken: true });
+      console.error(error)
     }
   }
 
@@ -49,16 +57,16 @@ const CreateUser = () => {
   };
 
   const handlePasswordChange = (e) => {
-    setPassword(e.target.value)
+    setPassword(e.target.value) 
   };
 
   return (
     <Paper elevation={3} className="paper-container">
       <Container component="main">
-        <Box component="form" display="flex" flexDirection="column" alignItems="center" justifyContent="center">
+        <Box component="form" className='createUser-box'>
           <Avatar sx={{bgcolor: "secondary.main"}}><PersonIcon/></Avatar>
           <Typography variant="h5"> Sign Up</Typography>
-          <Box sx={{mt: 2}} component="form" onSubmit={handleRegisterUser} display="flex" flexDirection="column" alignItems="center" justifyContent="center">
+          <Box className='createUser-box2' component="form" onSubmit={handleRegisterUser}>
             <Grid container spacing={2}>
               <Grid item xs={6}>
                 <TextField required fullWidth margin="normal" name="firstName" label="First Name" id="firstName"/>
