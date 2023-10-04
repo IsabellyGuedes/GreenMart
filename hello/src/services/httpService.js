@@ -1,6 +1,6 @@
 const httpService = {
     login: (data) => {
-        return fetch("http://localhost:3333/login",
+        return fetch("http://localhost:3030/user/login",
         {
             method: "POST",
             headers: {
@@ -10,7 +10,8 @@ const httpService = {
         })
     }, 
     createUser: (data) => {
-        return fetch("http://localhost:3333/createUser",
+    
+        return fetch("http://localhost:3030/user/create",
         {
             method: "POST",
             headers: {
@@ -18,6 +19,10 @@ const httpService = {
             },
             body: JSON.stringify(data)
         })
+    },
+
+    getToken: () => {
+        return localStorage.getItem("token");
     },
 
     getUser: () => {

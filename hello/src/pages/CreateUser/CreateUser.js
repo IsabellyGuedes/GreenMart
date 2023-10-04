@@ -19,37 +19,44 @@ const CreateUser = () => {
   const [password, setPassword] = useState('')
 
   const handleRegisterUser = async (e) => {
-    e.preventDefault()
+    e.preventDefault();
 
-    const formData = new FormData(e.currentTarget)
-    const data = {}
-    for(const [key, value] of formData) {
-        data[key] = value
+    const formData = new FormData(e.currentTarget);
+    const data = {};
+    
+    for (const [key, value] of formData) {
+      data[key] = value;
     }
+    console.log(data)
+    const response = await httpService.createUser(data);
+    if(response){
+      console.log('aq')
+    }
+    const result = await response.json();
+    console.log(response)
+    console.log(result)
+    // try {
+    //   const response = await httpService.createUser(data);
+    //   console.log(data)
 
-    try {
-      //modificar o createUser para oq está no back
-        const response = await httpService.createUser(data)
-        const result = await response.json()
+    //   const result = await response.json();
+      
+    //   console.log(response);
 
-      if (result.exists) {
-        toast.error("Usuário já cadastrado!");
-      } else {
-        const createUserResponse = await httpService.createUser(data)
-        const createUserResult = await createUserResponse.json
-
-        if (createUserResult.sucess) {
-          toast.success("Cadastro realizado com sucesso!")
-          localStorage.setItem("token", result["Access-Token"])
-          navigate('/')
-        } else {
-          toast.error("Erro ao criar o usuário!")
-        }
-        }
-    } catch (error) {
-      toast.error(error.message);
-      console.error(error)
-    }
+    //   if (result.exists) {
+    //     toast.error("Usuário já cadastrado!");
+    //   } else {
+    //     if (result.success) {
+    //       toast.success("Cadastro realizado com sucesso!");
+    //       navigate('/');
+    //     } else {
+    //       toast.error("Erro ao criar o usuário!");
+    //     }
+    //   }
+    // } catch (error) {
+    //   toast.error("Erro ao criar o usuário!");
+    //   console.error(error);
+    // }
   }
 
   const handlePasswordVisibility = () => {
@@ -63,10 +70,10 @@ const CreateUser = () => {
   return (
     <Paper elevation={3} className="paper-container">
       <Container component="main">
-        <Box component="form" className='createUser-box'>
+        <Box className='createUser-box'>
           <Avatar sx={{bgcolor: "secondary.main"}}><PersonIcon/></Avatar>
           <Typography variant="h5"> Sign Up</Typography>
-          <Box className='createUser-box2' component="form" onSubmit={handleRegisterUser}>
+          <Box component='form' className='createUser-box2' onSubmit={handleRegisterUser}>
             <Grid container spacing={2}>
               <Grid item xs={6}>
                 <TextField required fullWidth margin="normal" name="firstName" label="First Name" id="firstName"/>
@@ -95,7 +102,7 @@ const CreateUser = () => {
                     ),
                 }}
             />
-            <Button type="submit" fullWidth sx={{bgcolor: "secondary.main", mt: 2}} variant='contained'> Send </Button>
+            <Button type="submit"  fullWidth sx={{bgcolor: "secondary.main", mt: 2}} variant='contained'> Send </Button>
             <Grid sx={{mt: 2}}>
               <Link to='/'> Already have an account? Log in</Link> 
             </Grid>

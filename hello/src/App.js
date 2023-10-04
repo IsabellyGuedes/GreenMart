@@ -5,7 +5,6 @@ import Login from './pages/Login/Login';
 import CreateUser from './pages/CreateUser/CreateUser'
 import Home from './pages/Home/Home'
 import CreateProduct from './pages/CreateProduct/CreateProduct'
-import CreatePromotion from './pages/CreatePromotion/CreatePromotion'
 
 function App() {
   const defaultRouter = createBrowserRouter([
@@ -25,10 +24,6 @@ function App() {
       path: "/product/create",
       element: <CreateProduct/>
     },
-    {
-      path: "/promotion/create",
-      element: <CreatePromotion/>
-    },
   ])
 
   const defaultTheme = createTheme({
@@ -40,7 +35,7 @@ function App() {
           main: '#556B45'
         }
     }
-});
+  });
 
   return (
     <ThemeProvider theme={defaultTheme}>
