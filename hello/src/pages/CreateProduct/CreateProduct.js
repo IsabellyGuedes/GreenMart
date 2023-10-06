@@ -1,22 +1,97 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Avatar, Button, Container, Grid, TextField, Typography } from "@mui/material"
 import { Box } from "@mui/system"
 import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
-import { Link } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import CssBaseline from '@mui/material/CssBaseline';
 import './createProductStyle.css';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css'
+import { useNavigate } from 'react-router-dom'
+import httpService from '../../services/httpService'
 
 const CreateProduct = () => {
-  const [price, setPrice] = useState('');
+  const {state} = useLocation();
+  //const [name, setName] = useState('')
+  const productData = (state && state.product) ? state.product : {} //?  route.params : null
+  const [isEditing, setIsEditing] = useState(false);
+  const navigate = useNavigate()
+  //const [price, setPrice] = useState('');
+  const [isLoginDisabled, setIsLoginDisabled] = useState(false)
+  const [loginDisabledTimeout, setLoginDisabledTimeout] = useState(null)
+  const [formData, setFormData] = useState({
+    name: '',
+    category: '',
+    price: '',
+    id: '',
+  });
 
-  const handleRegisterProduct = (e) => {
+  useEffect(() => {
+    if (state && state.product) {
+      setFormData(state.product);
+    }
+  }, [state]);
 
+  useEffect(() => {
+    return () => {
+        if (loginDisabledTimeout) { 
+            clearTimeout(loginDisabledTimeout)
+        }
+    };
+}, [loginDisabledTimeout])
+
+  const handleRegisterProduct = async (e) => {
+    e.preventDefault();
+    if (isLoginDisabled) {
+      return;
+    }
+
+  setIsLoginDisabled(true)
+  setLoginDisabledTimeout(setTimeout(() => setIsLoginDisabled(false), 8000))
+
+    /*const formData = new FormData(e.currentTarget);
+    const data = {};
+    
+    for (const [key, value] of formData) {
+      data[key] = value;
+    }*/
+    
+    try{
+      const response = await httpService.createProduct(formData)
+      if (response.status === 201) {
+        const result = await response.json();
+        toast.success("Produto cadastrado com sucesso!")
+        setTimeout(() => {
+          navigate('/home');
+        }, 6000);
+      } else if (response.status === 409) {
+        const result = await response.json()
+        if (result.message) {
+          await toast.error(result.message)
+        }
+      } else {
+        const result = await response.json();
+        toast(result.message);
+      }
+    } catch (err) {
+      console.error(err);
+      toast.error("Erro ao criar o produto!");
+      }
   }
 
-  const handlePriceChange = (event) => {
+  const handleInputChange = (e) => {
+    console.log(formData)
+    const { name, value } = e.target;
+    setFormData({
+      ...formData,
+      [name]: value,
+    });
+  };
+
+  /*const handlePriceChange = (event) => {
     let inputValue = event.target.value;
 
     inputValue = inputValue.replace(/[^0-9.]/g, '');
@@ -27,7 +102,7 @@ const CreateProduct = () => {
     }
 
     setPrice(inputValue);
-  };
+  };*/
 
   return (
     <>
@@ -44,12 +119,12 @@ const CreateProduct = () => {
       </AppBar>
 
     <Container component="main">
-        <Box component="form" display="flex" flexDirection="column" alignItems="center" justifyContent="center" sx={{ mt: 4 }}>
+        <Box display="flex" flexDirection="column" alignItems="center" justifyContent="center" sx={{ mt: 4 }}>
           <Avatar sx={{bgcolor: "secondary.main"}}><AddShoppingCartIcon/></Avatar>
-          <Typography variant="h5"> Create Product</Typography>
-          <Box sx={{mt: 2}} component="form" onSubmit={handleRegisterProduct} display="flex" flexDirection="column" alignItems="center" justifyContent="center">
-            <TextField required fullWidth margin="normal" name='productName' label="Product Name"/>
-            <TextField required fullWidth margin="normal" name="productCategory" label="Product Category"/>
+          <Typography variant="h5"> {isEditing ? 'Edit Product' : 'Create Product'}</Typography>
+          <Box sx={{mt: 2}} component= "form" onSubmit={handleRegisterProduct} display="flex" flexDirection="column" alignItems="center" justifyContent="center">
+            <TextField required fullWidth margin="normal" name='name' value={formData.name} onChange={handleInputChange} label="Product Name"/>
+            <TextField required fullWidth margin="normal" name="category" value={formData.category} onChange={handleInputChange} label="Product Category"/>
             <Grid container spacing={2}>
               <Grid item xs={6}>
                 <TextField 
@@ -59,18 +134,19 @@ const CreateProduct = () => {
                   name="price"
                   label="Price"
                   type='text'
-                  value={price}
-                  onChange={handlePriceChange}
-                  inputProps={{ step: 0.01 }}
+                  value={formData.price}
+                  onChange={handleInputChange}
+                  inputProps={{ step: 0.01}}
                 />
               </Grid>
               <Grid item xs={6}>
-                <TextField required fullWidth margin="normal" name="productCode" label="Product Code"/>
+                <TextField required fullWidth margin="normal" name="id" label="Product Code" value={formData.id} onChange={handleInputChange}inputProps={{ pattern: "[0-9]{1,3}", title: "Product Code deve ser um número de 3 dígitos"}}/>
               </Grid>
             </Grid>
             <Button type="submit" fullWidth sx={{bgcolor: "secondary.main", mt: 2}} variant='contained'> Send </Button>
           </Box>
         </Box>
+        <ToastContainer/>
       </Container>
     </>
   )

@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Avatar, Button, Container, Grid, TextField, Typography, InputAdornment, IconButton } from "@mui/material"
 import { Box } from "@mui/system"
 import PersonIcon from '@mui/icons-material/Person';
@@ -9,7 +9,7 @@ import { Link } from 'react-router-dom'
 import VisibilityIcon from '@mui/icons-material/Visibility'
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff'
 
-import { toast } from 'react-toastify';
+import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css'
 import { useNavigate } from 'react-router-dom'
 
@@ -17,9 +17,25 @@ const CreateUser = () => {
   const navigate = useNavigate()
   const [showPassword, setShowPassword] = useState(false)
   const [password, setPassword] = useState('')
+  const [isLoginDisabled, setIsLoginDisabled] = useState(false)
+  const [loginDisabledTimeout, setLoginDisabledTimeout] = useState(null)
+
+  useEffect(() => {
+    return () => {
+        if (loginDisabledTimeout) { 
+            clearTimeout(loginDisabledTimeout)
+        }
+    };
+}, [loginDisabledTimeout])
 
   const handleRegisterUser = async (e) => {
     e.preventDefault();
+    if (isLoginDisabled) {
+      return;
+  }
+
+  setIsLoginDisabled(true)
+  setLoginDisabledTimeout(setTimeout(() => setIsLoginDisabled(false), 8000))
 
     const formData = new FormData(e.currentTarget);
     const data = {};
@@ -27,36 +43,30 @@ const CreateUser = () => {
     for (const [key, value] of formData) {
       data[key] = value;
     }
-    console.log(data)
-    const response = await httpService.createUser(data);
-    if(response){
-      console.log('aq')
+
+    try{
+      console.log(data)
+      const response = await httpService.createUser(data);
+
+      if (response.status === 201) {
+        const result = await response.json();
+        toast.success("Cadastro realizado com sucesso!")
+        setTimeout(() => {
+          navigate('/');
+        }, 6000);
+      } else if (response.status === 409) {
+        const result = await response.json()
+        if (result.message) {
+          await toast.error(result.message)
+        }
+      } else {
+        const result = await response.json()
+        toast("Erro ao realizar cadastro.")
+      }
+    } catch (err) {
+      toast.error("Erro ao criar o usuário!");
+      console.error(err);
     }
-    const result = await response.json();
-    console.log(response)
-    console.log(result)
-    // try {
-    //   const response = await httpService.createUser(data);
-    //   console.log(data)
-
-    //   const result = await response.json();
-      
-    //   console.log(response);
-
-    //   if (result.exists) {
-    //     toast.error("Usuário já cadastrado!");
-    //   } else {
-    //     if (result.success) {
-    //       toast.success("Cadastro realizado com sucesso!");
-    //       navigate('/');
-    //     } else {
-    //       toast.error("Erro ao criar o usuário!");
-    //     }
-    //   }
-    // } catch (error) {
-    //   toast.error("Erro ao criar o usuário!");
-    //   console.error(error);
-    // }
   }
 
   const handlePasswordVisibility = () => {
@@ -109,6 +119,7 @@ const CreateUser = () => {
           </Box>
         </Box>
       </Container>
+      <ToastContainer/>
     </Paper>
   )
 }

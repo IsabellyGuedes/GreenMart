@@ -25,17 +25,28 @@ const httpService = {
         return localStorage.getItem("token");
     },
 
-    getUser: () => {
-/*         return fetch("http://localhost:3333/login",
+    createProduct: (data) => {
+    
+        return fetch("http://localhost:3030/product/create",
         {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
                 "Authorization": localStorage.getItem("token")
-
             },
             body: JSON.stringify(data)
-        })  */
-    }
+        })
+    },
+
+    getProducts: () => {
+        return fetch("http://localhost:3030/products",
+       {
+           method: "GET",
+           headers: {
+               "Content-Type": "application/json",
+               "Authorization": localStorage.getItem("token")
+           }
+       })  
+   }
 }
 export default httpService

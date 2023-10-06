@@ -44,15 +44,20 @@ const Login = () => {
 
         try {
             const response = await httpService.login(data)
-            const result = await response.json()
-            if (result.message) {
-                return toast(result.message)
+
+            if (response.status === 200) { 
+                const result = await response.json()
+                localStorage.setItem("token", "Bearer " + result["Access-Token"])
+                navigate("/home")
+            } else {
+                const result = await response.json()
+                if (result.message) {
+                    toast.error(result.message)
+                }
             }
-            localStorage.setItem("token", "Bearer " + result["Access-Token"])
-            navigate("/home")
         } catch (err) {
-            toast("Erro ao realizar login!")
-        } 
+            toast("Erro ao realizar login!");
+        }
     }
 
   const handlePasswordVisibility = () => {
