@@ -15,12 +15,36 @@ import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
-import { Box } from '@mui/material';
+import { Box, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@mui/material';
 import httpService from '../../services/httpService'
+import './homeStyle.css'
 
 const Home = () => {
   const [products, setProducts] = useState([])
   const navigate = useNavigate()
+  const [open, setOpen] = React.useState(false)
+  const [productIdToDelete, setProductIdToDelete] = useState(null)
+
+  const handleRemoveProduct = async () => {
+    try {
+      await httpService.deleteProduct(productIdToDelete);
+      
+      setProducts(prevProducts => prevProducts.filter(p => p.id !== productIdToDelete));
+  
+      handleClose();
+    } catch (error) {
+      console.error('Erro ao remover o produto:', error);
+    }
+  }
+
+  const handleClickOpen = (productId) => {
+    setProductIdToDelete(productId);
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
 
   const handleSignOut = () => {
     localStorage.removeItem("token")
@@ -69,12 +93,34 @@ const Home = () => {
                     <CardActions>
                       <Grid container spacing={2}>
                         <Grid item xs={6}>
-                          <Button size="small">
+                          <Button size="small" variant="outlined" onClick={() => handleClickOpen(product.id)} sx={{ border: 'none', '&:hover': { border: 'none' } }}>
                             <ClearIcon/>
                             <Typography color="inherit" noWrap sx={{ textTransform: 'none', mr: 1 }}>
                               Remove
                             </Typography>
                           </Button>
+                          <Dialog
+                            open={open}
+                            onClose={handleClose}
+                            aria-labelledby="alert-dialog-title"
+                            aria-describedby="alert-dialog-description"
+                            sx={{ background: '#ffffff' }}
+                          >
+                            <DialogTitle id="alert-dialog-title">
+                              {"Delete product?"}
+                            </DialogTitle>
+                            <DialogContent>
+                              <DialogContentText id="alert-dialog-description">
+                                Are you sure you want to delete the product.
+                              </DialogContentText>
+                            </DialogContent>
+                            <DialogActions>
+                              <Button onClick={handleClose}>No</Button>
+                              <Button onClick={handleRemoveProduct} autoFocus>
+                                Yes
+                              </Button>
+                            </DialogActions>
+                          </Dialog>
                         </Grid>
                         <Grid item xs={6}>
                           <Button onClick={goTo("/product/create", product)} size="small">

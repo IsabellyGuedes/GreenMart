@@ -15,11 +15,9 @@ import httpService from '../../services/httpService'
 
 const CreateProduct = () => {
   const {state} = useLocation();
-  //const [name, setName] = useState('')
-  const productData = (state && state.product) ? state.product : {} //?  route.params : null
-  const [isEditing, setIsEditing] = useState(false);
+  const productData = (state && state.product) ? state.product : {}
+  const [isEditing] = useState(false);
   const navigate = useNavigate()
-  //const [price, setPrice] = useState('');
   const [isLoginDisabled, setIsLoginDisabled] = useState(false)
   const [loginDisabledTimeout, setLoginDisabledTimeout] = useState(null)
   const [formData, setFormData] = useState({
@@ -49,15 +47,8 @@ const CreateProduct = () => {
       return;
     }
 
-  setIsLoginDisabled(true)
-  setLoginDisabledTimeout(setTimeout(() => setIsLoginDisabled(false), 8000))
-
-    /*const formData = new FormData(e.currentTarget);
-    const data = {};
-    
-    for (const [key, value] of formData) {
-      data[key] = value;
-    }*/
+    setIsLoginDisabled(true)
+    setLoginDisabledTimeout(setTimeout(() => setIsLoginDisabled(false), 8000))
     
     try{
       const response = await httpService.createProduct(formData)
@@ -90,19 +81,6 @@ const CreateProduct = () => {
       [name]: value,
     });
   };
-
-  /*const handlePriceChange = (event) => {
-    let inputValue = event.target.value;
-
-    inputValue = inputValue.replace(/[^0-9.]/g, '');
-
-    const decimalCount = (inputValue.split('.')[1] || []).length;
-    if (decimalCount > 2) {
-      inputValue = parseFloat(inputValue).toFixed(2);
-    }
-
-    setPrice(inputValue);
-  };*/
 
   return (
     <>

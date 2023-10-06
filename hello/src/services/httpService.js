@@ -47,6 +47,16 @@ const httpService = {
                "Authorization": localStorage.getItem("token")
            }
        })  
-   }
+   },
+
+   deleteProduct: (productId) => {
+    return fetch(`http://localhost:3030/product/${productId}`, {
+        method: "DELETE",
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": localStorage.getItem("token")
+        }
+    });
+}
 }
 export default httpService
