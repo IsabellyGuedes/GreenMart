@@ -95,7 +95,7 @@ const Home = () => {
                         <Grid item xs={6}>
                           <Button size="small" variant="outlined" onClick={() => handleClickOpen(product.id)} sx={{ border: 'none', '&:hover': { border: 'none' } }}>
                             <ClearIcon/>
-                            <Typography color="inherit" noWrap sx={{ textTransform: 'none', mr: 1 }}>
+                            <Typography color="inherit" noWrap className='custom-element'>
                               Remove
                             </Typography>
                           </Button>
@@ -125,7 +125,7 @@ const Home = () => {
                         <Grid item xs={6}>
                           <Button onClick={goTo("/product/create", product)} size="small">
                           <EditIcon/>
-                            <Typography color="inherit" noWrap sx={{ textTransform: 'none', mr: 1 }}>
+                            <Typography color="inherit" noWrap className='custom-element'>
                               Edit
                             </Typography>
                           </Button>                         
@@ -161,7 +161,7 @@ const Home = () => {
         <CssBaseline />
         <AppBar position="relative">
           <Toolbar>
-            <LocalGroceryStoreIcon sx={{ mr: 2 }} />
+            <LocalGroceryStoreIcon className='spacing' />
             <Typography variant="h6" color="inherit" noWrap>
               GreenMart
             </Typography>
@@ -177,9 +177,9 @@ const Home = () => {
           </Toolbar>
         </AppBar>
         <main>
-        <Box sx={{ position: 'relative', mt: 5, mr: -90 }}>
+        <Box className='element'>
             <Button component={RouterLink} onClick={goTo("/product/create")} sx={{ textTransform: 'none', bgcolor: "primary.main"}}>
-              <Typography variant="h6" color="black" noWrap sx={{ textTransform: 'none', fontSize: "14px" }}>
+              <Typography variant="h6" color="black" noWrap className='custom-text'>
                 Add Product
               </Typography>
             </Button>

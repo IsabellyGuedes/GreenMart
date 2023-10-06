@@ -1,0 +1,24 @@
+.text {
+    text-decoration: none;
+    color: inherit;
+}
+
+.spacing {
+    margin-right: 2px;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-top: 4rem;
+}
+
+.form-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-top: 1rem;
+}

@@ -3,3 +3,22 @@
     margin-left: -90px;
 }
 
+.custom-element {
+    text-transform: none;
+    margin-right: 1rem; 
+}
+
+.spacing {
+    margin-right: 2rem;
+}
+
+.element {
+    position: relative;
+    margin-top: 50px;
+    margin-right: -700px;
+}
+
+.custom-text {
+    text-transform: none;
+    font-size: 14px;
+}

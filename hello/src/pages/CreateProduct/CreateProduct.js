@@ -87,8 +87,8 @@ const CreateProduct = () => {
       <CssBaseline />
       <AppBar position="relative">
         <Toolbar>
-          <Button component={Link} to="/home" color="inherit" style={{textDecoration: 'none'}}>
-            <ArrowBackIosNewIcon sx={{ mr: 2 }}/>
+          <Button component={Link} to="/home" color="inherit" className="text">
+            <ArrowBackIosNewIcon className='spacing'/>
           </Button>
           <Typography variant="h6" color="inherit" noWrap style={{ margin: 'auto' }}>
             GreenMart
@@ -97,10 +97,10 @@ const CreateProduct = () => {
       </AppBar>
 
     <Container component="main">
-        <Box display="flex" flexDirection="column" alignItems="center" justifyContent="center" sx={{ mt: 4 }}>
+        <Box className='container'>
           <Avatar sx={{bgcolor: "secondary.main"}}><AddShoppingCartIcon/></Avatar>
           <Typography variant="h5"> {isEditing ? 'Edit Product' : 'Create Product'}</Typography>
-          <Box sx={{mt: 2}} component= "form" onSubmit={handleRegisterProduct} display="flex" flexDirection="column" alignItems="center" justifyContent="center">
+          <Box component= "form" onSubmit={handleRegisterProduct} className='form-container'>
             <TextField required fullWidth margin="normal" name='name' value={formData.name} onChange={handleInputChange} label="Product Name"/>
             <TextField required fullWidth margin="normal" name="category" value={formData.category} onChange={handleInputChange} label="Product Category"/>
             <Grid container spacing={2}>
@@ -125,7 +125,7 @@ const CreateProduct = () => {
           </Box>
         </Box>
         <ToastContainer/>
-      </Container>
+      </Container> 
     </>
   )
 }
